@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekend Mix Tape</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <header class="top-bar widget">
+            <div id="clock">00:00 AM</div>
+            
+            <div class="weather-container">
+                <select id="city-select">
+                    <option value="Hyderabad">Hyderabad</option>
+                    <option value="Dimapur">Dimapur</option>
+                    <option value="Kohima">Kohima</option>
+                    <option value="Guwahati">Assam</option> 
+                    <option value="Shillong">Shillong</option>
+                    <option value="Bangalore">Bangalore</option>
+                </select>
+                <div id="weather">Fetching...</div>
+            </div>
+        </header>
+
+        <div class="main-grid">
+            
+            <div class="widget tape-widget">
+                <div class="tape-header-row">
+                    <h2>// WEEKEND MIX TAPE</h2>
+                    <button id="open-creator-btn" class="text-btn">[+ CREATE TAPE]</button>
+                </div>
+                
+                <div class="cassette" id="cassette-body">
+                    <div class="cassette-label">
+                        <div class="cassette-title" id="display-title">Study Mix</div>
+                        <div class="spools">
+                            <div class="spool"></div>
+                            <div class="spool"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button id="play-pause-btn">[ PLAY ]</button>
+                    <button id="next-btn">[ NEXT TRACK ]</button>
+                </div>
+                
+                <div class="tracklist-container" id="tracklist">
+                    <div class="track-item active" id="current-track-name">> Chill Vibes</div>
+                </div>
+
+                <div id="yt-player-container"><div id="yt-player"></div></div>
+            </div>
+
+            <div class="widget todo-widget">
+                <h2>// TASKS</h2>
+                <div class="todo-input-group">
+                    <input type="text" id="new-task" placeholder="Type a task, hit Enter..." autocomplete="off">
+                </div>
+                <ul id="task-list"></ul>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="creator-modal" class="modal-overlay hidden">
+        <div class="modal-content widget">
+            <h2>// BUILD A NEW TAPE</h2>
+            
+            <label>Tape Name</label>
+            <input type="text" id="new-tape-title" placeholder="e.g., Midnight Drive">
+            
+            <label>Tracklist (YouTube Links, 1 per line)</label>
+            <textarea id="new-tape-links" placeholder="https://youtube.com/...&#10;https://youtube.com/..."></textarea>
+            
+            <div class="modal-actions">
+                <button id="cancel-creator-btn" class="outline-btn">CANCEL</button>
+                <button id="generate-tape-btn" class="filled-btn">BURN TAPE</button>
+            </div>
+
+            <div id="share-container" class="hidden">
+                <label>Share this link:</label>
+                <input type="text" id="share-link-input" readonly>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
