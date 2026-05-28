@@ -174,6 +174,86 @@ input[type=range]::-moz-range-thumb {
     border: none;
 }
 
+/* --- EXPLORE PAGE GRID --- */
+.explore-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.tape-card {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    padding: 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.tape-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-5px); /* Creates a cool floating effect */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+}
+
+.tape-card h3 {
+    font-size: 2rem;
+    color: var(--text-main);
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tape-card p {
+    font-size: 1.4rem;
+    color: var(--accent);
+    opacity: 0.8;
+}
+
+/* Tiny aesthetic spools for the cards */
+.mini-spools {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 15px;
+}
+.mini-spool {
+    width: 30px;
+    height: 30px;
+    background: var(--bg-dark);
+    border: 2px dashed var(--border);
+    border-radius: 50%;
+}
+.tape-card:hover .mini-spool {
+    animation: spin 3s linear infinite; /* Spins when you hover! */
+}
+
+/* --- TOP BAR EXPLORE BUTTON --- */
+.explore-nav-btn {
+    background: rgba(220, 184, 255, 0.05);
+    color: var(--accent);
+    border: 2px dashed var(--border);
+    padding: 8px 20px;
+    text-decoration: none;
+    font-size: 2rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 1px;
+}
+
+.explore-nav-btn:hover {
+    background: var(--accent);
+    color: var(--bg-dark);
+    border: 2px solid var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(220, 184, 255, 0.2);
+}
+
 /* Spin Animation */
 @keyframes spin { 100% { transform: rotate(360deg); } }
 .playing .spool { animation: spin 2.5s linear infinite; }
