@@ -45,7 +45,19 @@ h2 { font-size: 2.2rem; color: var(--accent); margin-bottom: 15px; border-bottom
 #clock { color: var(--text-main); letter-spacing: 2px; }
 #weather { color: var(--accent); font-size: 2rem; }
 
-.main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+/* Main Grid & Columns */
+.main-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 20px; 
+    align-items: start; /* Keeps widgets glued to the top */
+}
+
+.left-column, .right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Precise spacing between stacked widgets */
+}
 
 /* UPGRADED CASSETTE UI */
 .cassette {
@@ -101,6 +113,67 @@ h2 { font-size: 2.2rem; color: var(--accent); margin-bottom: 15px; border-bottom
     color: var(--text-main); 
 }
 
+/* Ambient Mixer Sliders - Perfectly Aligned */
+.slider-group {
+    display: grid;
+    grid-template-columns: 90px 1fr; /* Locks the label width so all sliders start at the exact same pixel */
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.slider-group label {
+    font-size: 1.6rem;
+    color: var(--text-main);
+    display: flex;
+    justify-content: space-between; /* Pushes the emoji and text apart cleanly */
+    align-items: center;
+}
+
+/* Customizing the Range Slider */
+input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    background: transparent;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 8px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 20px;
+    width: 12px;
+    background: var(--accent);
+    cursor: pointer;
+    margin-top: -7px;
+    border-radius: 2px;
+}
+
+/* Firefox Support for the slider track */
+input[type=range]::-moz-range-track {
+    width: 100%;
+    height: 8px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+}
+
+/* Firefox Support for the slider thumb */
+input[type=range]::-moz-range-thumb {
+    height: 20px;
+    width: 12px;
+    background: var(--accent);
+    cursor: pointer;
+    border-radius: 2px;
+    border: none;
+}
+
 /* Spin Animation */
 @keyframes spin { 100% { transform: rotate(360deg); } }
 .playing .spool { animation: spin 2.5s linear infinite; }
@@ -147,4 +220,56 @@ textarea { height: 120px; resize: vertical; }
 
 #yt-player-container { position: absolute; left: -9999px; top: -9999px; }
 
-@media (max-width: 768px) { .main-grid { grid-template-columns: 1fr; } }
+/* Mobile Friendliness, Reordering & Width Fix */
+@media (max-width: 768px) { 
+    body {
+        padding: 10px; /* Slightly less padding to save space on small screens */
+    }
+    
+    .top-bar {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .weather-container {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    /* --- MOBILE REORDERING & WIDTH FIX --- */
+    .main-grid { 
+        display: flex; 
+        flex-direction: column; 
+        align-items: stretch; /* Forces children to span full width */
+        width: 100%;
+    }
+    
+    .left-column, .right-column {
+        display: contents; 
+    }
+
+    /* Force widgets to fill the horizontal space */
+    .widget {
+        width: 100%;
+        margin-bottom: 0; /* Let the gap handle spacing */
+    }
+
+    .tape-widget { order: 1; }
+    .todo-widget { order: 2; }
+    .ambient-widget { order: 3; }
+
+    /* Adjust Sliders for narrow screens */
+    .slider-group {
+        grid-template-columns: 80px 1fr; /* Slightly narrower label area */
+        gap: 10px;
+    }
+
+    .cassette-title {
+        font-size: 1.8rem;
+    }
+
+    .spools {
+        width: 90%; 
+    }
+}
