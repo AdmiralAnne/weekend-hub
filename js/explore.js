@@ -10,6 +10,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const loadingMsg = document.getElementById('loading-msg');
     const myGhostId = getGhostId(); 
 
+    // --- NEW: Dynamic Back Button Logic ---
+    const backBtn = document.getElementById('back-to-deck-btn');
+    const lastTape = localStorage.getItem('study_last_tape');
+    if (lastTape && backBtn) {
+        // If they came from a custom tape, rewrite the link to include the hash!
+        backBtn.href = `index.html#${lastTape}`;
+    }
+
     // Fetch all tapes from Supabase, newest first
     const { data, error } = await supabase
         .from('mixtapes')

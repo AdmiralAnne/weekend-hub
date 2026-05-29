@@ -13,10 +13,9 @@ export async function initPlayer() {
 
     // 1. CHECK FOR CLOUD TAPE ON LOAD
     const hashData = window.location.hash.substring(1);
-    if (hashData && hashData.length > 20) { // UUIDs are 36 characters
+    if (hashData && hashData.length > 20) { 
         document.getElementById('display-title').textContent = "Loading cloud tape...";
         
-        // Fetch from Supabase!
         const { data, error } = await supabase
             .from('mixtapes')
             .select('*')
@@ -25,22 +24,27 @@ export async function initPlayer() {
 
         if (data && !error) {
             mixtape = { title: data.title, tracks: data.tracks };
+            // NEW: Remember this specific tape ID!
+            localStorage.setItem('study_last_tape', hashData); 
         } else {
             console.error("Tape not found in database.");
         }
+    } else {
+        // NEW: If there is no hash, clear the memory so it goes to the default tape
+        localStorage.removeItem('study_last_tape'); 
     }
 
     // Set UI Title and render the tracks
     document.getElementById('display-title').textContent = mixtape.title;
     renderTracklist();
 
-    // 2. LOAD YOUTUBE API (Only after database finishes loading!)
+    // LOAD YOUTUBE API (Only after database finishes loading- otherwise there's a bug)
     if (!window.YT) {
         const tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         document.head.appendChild(tag);
     } else if (window.YT && window.YT.Player) {
-        setupYTPlayer(); // If API is already loaded from a page refresh
+        setupYTPlayer(); 
     }
 
     window.onYouTubeIframeAPIReady = () => {
@@ -55,19 +59,19 @@ export async function initPlayer() {
                 'playsinline': 1, 
                 'controls': 0, 
                 'disablekb': 1,
-                'origin': window.location.origin // <-- THIS FIXES THE TARGET ORIGIN ERROR
+                'origin': window.location.origin // a diy fix for the target origin erro
             },
             events: { 
                 'onStateChange': onPlayerStateChange,
                 'onError': () => { 
                     console.error("Video Error/Blocked. Skipping to next..."); 
-                    setTimeout(playNext, 500); // <-- Safely skip without infinite loop crashes
+                    setTimeout(playNext, 500); // Safely skip without infinite loop crashes
                 }
             }
         });
     }
 
-    // 3. STANDARD PLAYER LOGIC
+    // music player logic idk if I can add all the details in the commeents
     function onPlayerStateChange(event) {
         const cassette = document.getElementById('cassette-body');
         const playBtn = document.getElementById('play-pause-btn');
