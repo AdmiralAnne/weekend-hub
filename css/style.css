@@ -254,6 +254,43 @@ input[type=range]::-moz-range-thumb {
     box-shadow: 0 5px 15px rgba(220, 184, 255, 0.2);
 }
 
+/* --- UNIVERSAL FOOTER --- */
+.site-footer {
+    width: 100%;
+    margin-top: 40px;
+    padding: 25px 20px;
+    border-top: 1px dashed var(--border);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.footer-content {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.footer-link {
+    color: var(--text-main);
+    font-family: var(--font-ui);
+    font-size: 1.6rem;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+    color: var(--accent);
+}
+
+.footer-divider {
+    color: var(--border);
+    font-size: 1.6rem;
+}
+
 /* Spin Animation */
 @keyframes spin { 100% { transform: rotate(360deg); } }
 .playing .spool { animation: spin 2.5s linear infinite; }

@@ -1,4 +1,5 @@
 import { supabase } from './db.js';
+import { initFooter } from './footer.js'; // <-- NEW: Import the footer
 
 // Get the user's secret ID from their browser
 function getGhostId() {
@@ -6,11 +7,14 @@ function getGhostId() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+    
+    initFooter(); // <-- NEW: Inject the footer into the Explore page!
+
     const grid = document.getElementById('tape-grid');
     const loadingMsg = document.getElementById('loading-msg');
     const myGhostId = getGhostId(); 
 
-    // --- NEW: Dynamic Back Button Logic ---
+    // --- Dynamic Back Button Logic ---
     const backBtn = document.getElementById('back-to-deck-btn');
     const lastTape = localStorage.getItem('study_last_tape');
     if (lastTape && backBtn) {
