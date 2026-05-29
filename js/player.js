@@ -51,10 +51,18 @@ export async function initPlayer() {
         ytPlayer = new YT.Player('yt-player', {
             height: '200', width: '200',
             videoId: mixtape.tracks[0],
-            playerVars: { 'playsinline': 1, 'controls': 0, 'disablekb': 1 },
+            playerVars: { 
+                'playsinline': 1, 
+                'controls': 0, 
+                'disablekb': 1,
+                'origin': window.location.origin // <-- THIS FIXES THE TARGET ORIGIN ERROR
+            },
             events: { 
                 'onStateChange': onPlayerStateChange,
-                'onError': () => { console.error("Video Error/Blocked"); playNext(); }
+                'onError': () => { 
+                    console.error("Video Error/Blocked. Skipping to next..."); 
+                    setTimeout(playNext, 500); // <-- Safely skip without infinite loop crashes
+                }
             }
         });
     }
