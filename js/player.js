@@ -173,10 +173,21 @@ export async function initPlayer() {
         shareInput.value = "Saving to cloud...";
         document.getElementById('share-container').classList.remove('hidden');
 
-        // SAVE TO SUPABASE!
+        // --- NEW: Ghost User Authentication ---
+        let ghostId = localStorage.getItem('study_ghost_id');
+        if (!ghostId) {
+            ghostId = 'user_' + Math.random().toString(36).substr(2, 12);
+            localStorage.setItem('study_ghost_id', ghostId);
+        }
+
+        // SAVE TO SUPABASE WITH CREATOR ID!
         const { data, error } = await supabase
             .from('mixtapes')
-            .insert([{ title: title, tracks: newTrackIds }])
+            .insert([{ 
+                title: title, 
+                tracks: newTrackIds,
+                creator_id: ghostId // <-- This stamps the tape as yours
+            }])
             .select();
 
         if (error) {

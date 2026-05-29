@@ -22,8 +22,24 @@
 
         <div id="tape-grid" class="explore-grid"></div>
 
+    <div id="edit-modal" class="modal-overlay hidden">
+        <div class="modal-content widget">
+            
+            <h2 style="margin-bottom: 20px;">// RE-BURN TAPE</h2>
+            
+            <label>Tape Name</label>
+            <input type="text" id="edit-tape-title" placeholder="e.g., Midnight Drive">
+            
+            <label>Tracklist (YouTube Links, 1 per line)</label>
+            <textarea id="edit-tape-links" placeholder="https://youtube.com/...&#10;https://youtube.com/..."></textarea>
+            
+            <div class="modal-actions">
+                <button id="cancel-edit-btn" class="outline-btn">CANCEL</button>
+                <button id="save-edit-btn" class="filled-btn">SAVE CHANGES</button>
+            </div>
+            
+        </div>
     </div>
-
     <script type="module" src="js/explore.js"></script>
 </body>
 </html>

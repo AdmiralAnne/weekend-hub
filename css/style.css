@@ -50,13 +50,13 @@ h2 { font-size: 2.2rem; color: var(--accent); margin-bottom: 15px; border-bottom
     display: grid; 
     grid-template-columns: 1fr 1fr; 
     gap: 20px; 
-    align-items: start; /* Keeps widgets glued to the top */
+    align-items: start;
 }
 
 .left-column, .right-column {
     display: flex;
     flex-direction: column;
-    gap: 20px; /* Precise spacing between stacked widgets */
+    gap: 20px; 
 }
 
 /* UPGRADED CASSETTE UI */
@@ -107,16 +107,15 @@ h2 { font-size: 2.2rem; color: var(--accent); margin-bottom: 15px; border-bottom
     background: rgba(220, 184, 255, 0.1);
 }
 
-/* Style the dropdown options */
 #city-select option { 
     background: var(--bg-dark); 
     color: var(--text-main); 
 }
 
-/* Ambient Mixer Sliders - Perfectly Aligned */
+/* Ambient Mixer Sliders */
 .slider-group {
     display: grid;
-    grid-template-columns: 90px 1fr; /* Locks the label width so all sliders start at the exact same pixel */
+    grid-template-columns: 90px 1fr; 
     align-items: center;
     gap: 15px;
     margin-bottom: 15px;
@@ -126,18 +125,17 @@ h2 { font-size: 2.2rem; color: var(--accent); margin-bottom: 15px; border-bottom
     font-size: 1.6rem;
     color: var(--text-main);
     display: flex;
-    justify-content: space-between; /* Pushes the emoji and text apart cleanly */
+    justify-content: space-between; 
     align-items: center;
 }
 
-/* Customizing the Range Slider */
 input[type=range] {
     -webkit-appearance: none;
     width: 100%;
     background: transparent;
 }
 
-input[type=range]::-webkit-slider-runnable-track {
+input[type=range]::-webkit-slider-runnable-track, input[type=range]::-moz-range-track {
     width: 100%;
     height: 8px;
     background: rgba(0,0,0,0.3);
@@ -145,31 +143,13 @@ input[type=range]::-webkit-slider-runnable-track {
     border-radius: 4px;
 }
 
-input[type=range]::-webkit-slider-thumb {
+input[type=range]::-webkit-slider-thumb, input[type=range]::-moz-range-thumb {
     -webkit-appearance: none;
     height: 20px;
     width: 12px;
     background: var(--accent);
     cursor: pointer;
     margin-top: -7px;
-    border-radius: 2px;
-}
-
-/* Firefox Support for the slider track */
-input[type=range]::-moz-range-track {
-    width: 100%;
-    height: 8px;
-    background: rgba(0,0,0,0.3);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-}
-
-/* Firefox Support for the slider thumb */
-input[type=range]::-moz-range-thumb {
-    height: 20px;
-    width: 12px;
-    background: var(--accent);
-    cursor: pointer;
     border-radius: 2px;
     border: none;
 }
@@ -193,7 +173,7 @@ input[type=range]::-moz-range-thumb {
 
 .tape-card:hover {
     border-color: var(--accent);
-    transform: translateY(-5px); /* Creates a cool floating effect */
+    transform: translateY(-5px); 
     box-shadow: 0 10px 20px rgba(0,0,0,0.4);
 }
 
@@ -212,7 +192,6 @@ input[type=range]::-moz-range-thumb {
     opacity: 0.8;
 }
 
-/* Tiny aesthetic spools for the cards */
 .mini-spools {
     display: flex;
     justify-content: center;
@@ -227,7 +206,7 @@ input[type=range]::-moz-range-thumb {
     border-radius: 50%;
 }
 .tape-card:hover .mini-spool {
-    animation: spin 3s linear infinite; /* Spins when you hover! */
+    animation: spin 3s linear infinite; 
 }
 
 /* --- TOP BAR EXPLORE BUTTON --- */
@@ -282,74 +261,39 @@ textarea { height: 120px; resize: vertical; }
 .task span { cursor: pointer; flex-grow: 1; }
 .delete-btn { background: none; border: none; color: #ff8585; cursor: pointer; font-size: 1.4rem; padding: 0 10px;}
 
-/* CREATOR MODAL */
+/* --- UNIFIED MODAL SYSTEM (The Classic Look) --- */
 .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
     display: flex; justify-content: center; align-items: center; z-index: 100;
 }
-.modal-overlay.hidden { display: none; }
+.modal-overlay.hidden { display: none !important; }
+
 .modal-content { width: 100%; max-width: 500px; }
 .modal-content label { display: block; font-size: 1.4rem; margin-bottom: 5px; color: var(--accent);}
+
 .modal-actions { display: flex; gap: 10px; margin-top: 10px;}
-.outline-btn { flex: 1; background: transparent; color: var(--text-main); border: 2px solid var(--border); font-size: 1.6rem; padding: 10px; cursor: pointer; border-radius: 4px;}
-.filled-btn { flex: 2; background: var(--accent); color: var(--bg-dark); border: 2px solid var(--accent); font-size: 1.6rem; padding: 10px; cursor: pointer; border-radius: 4px;}
+.outline-btn { flex: 1; background: transparent; color: var(--text-main); border: 2px solid var(--border); font-size: 1.6rem; padding: 10px; cursor: pointer; border-radius: 4px; transition: background 0.2s;}
+.outline-btn:hover { background: rgba(220, 184, 255, 0.1); }
+.filled-btn { flex: 1; background: var(--accent); color: var(--bg-dark); border: 2px solid var(--accent); font-size: 1.6rem; padding: 10px; cursor: pointer; border-radius: 4px;}
 
 #share-container { margin-top: 20px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 4px; border: 1px dashed var(--accent);}
 #share-container.hidden { display: none; }
 
 #yt-player-container { position: absolute; left: -9999px; top: -9999px; }
 
-/* Mobile Friendliness, Reordering & Width Fix */
+/* Mobile Friendliness */
 @media (max-width: 768px) { 
-    body {
-        padding: 10px; /* Slightly less padding to save space on small screens */
-    }
-    
-    .top-bar {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
-    }
-
-    .weather-container {
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-
-    /* --- MOBILE REORDERING & WIDTH FIX --- */
-    .main-grid { 
-        display: flex; 
-        flex-direction: column; 
-        align-items: stretch; /* Forces children to span full width */
-        width: 100%;
-    }
-    
-    .left-column, .right-column {
-        display: contents; 
-    }
-
-    /* Force widgets to fill the horizontal space */
-    .widget {
-        width: 100%;
-        margin-bottom: 0; /* Let the gap handle spacing */
-    }
-
+    body { padding: 10px; }
+    .top-bar { flex-direction: column; gap: 15px; text-align: center; }
+    .weather-container { justify-content: center; flex-wrap: wrap; }
+    .main-grid { display: flex; flex-direction: column; align-items: stretch; width: 100%; }
+    .left-column, .right-column { display: contents; }
+    .widget { width: 100%; margin-bottom: 0; }
     .tape-widget { order: 1; }
     .todo-widget { order: 2; }
     .ambient-widget { order: 3; }
-
-    /* Adjust Sliders for narrow screens */
-    .slider-group {
-        grid-template-columns: 80px 1fr; /* Slightly narrower label area */
-        gap: 10px;
-    }
-
-    .cassette-title {
-        font-size: 1.8rem;
-    }
-
-    .spools {
-        width: 90%; 
-    }
+    .slider-group { grid-template-columns: 80px 1fr; gap: 10px; }
+    .cassette-title { font-size: 1.8rem; }
+    .spools { width: 90%; }
 }
