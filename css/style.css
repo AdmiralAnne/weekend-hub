@@ -57,6 +57,7 @@ h2 { font-size: 2.2rem; color: var(--accent); margin-bottom: 15px; border-bottom
     display: flex;
     flex-direction: column;
     gap: 20px; 
+    min-width: 0; /* <-- THIS IS THE MAGIC FIX! Stops the layout crash */
 }
 
 /* UPGRADED CASSETTE UI */
@@ -338,6 +339,7 @@ input[type=range]::-moz-range-thumb {
     font-family: var(--font-ui);
 }
 
+
 /* Spin Animation */
 @keyframes spin { 100% { transform: rotate(360deg); } }
 .playing .spool { animation: spin 2.5s linear infinite; }
@@ -346,7 +348,14 @@ input[type=range]::-moz-range-thumb {
 .controls button { flex: 1; background: transparent; color: var(--accent); border: 2px solid var(--border); font-size: 1.8rem; padding: 10px; cursor: pointer; transition: 0.2s; border-radius: 4px;}
 .controls button:hover, .controls button.active-btn { background: var(--accent); color: var(--bg-dark); }
 
-.tracklist-container { background: rgba(0,0,0,0.2); border: 2px solid var(--border); padding: 10px; border-radius: 4px; max-height: 120px; overflow-y: auto;}
+.tracklist-container { 
+    background: rgba(0,0,0,0.2); 
+    border: 2px solid var(--border); 
+    padding: 10px; 
+    border-radius: 4px; 
+    /* Removed max-height so it shows all songs! */
+    overflow: hidden; /* Keeps the marquee text contained inside the box */
+}
 .track-item { font-size: 1.5rem; opacity: 0.6; cursor: pointer; transition: 0.2s; margin-bottom: 5px;}
 .track-item:hover { opacity: 1; }
 .track-item.active { opacity: 1; color: var(--accent); }
