@@ -156,10 +156,11 @@ export async function initPlayer() {
         const title = document.getElementById('new-tape-title').value.trim() || "Weekend Mix";
         const rawLinks = document.getElementById('new-tape-links').value;
 
+        // Upgraded link parser that catches standard, mobile, shorts, and live links
         const newTrackIds = rawLinks.split('\n')
             .map(link => {
-                const match = link.trim().match(/[?&]v=([^#&?]+)|youtu\.be\/([^#&?]+)/);
-                return match ? (match[1] || match[2]) : null;
+                const match = link.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|live\/|shorts\/))([^#&?]*).*/);
+                return (match && match[1].length === 11) ? match[1] : null;
             })
             .filter(id => id !== null);
 
