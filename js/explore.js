@@ -1,5 +1,5 @@
 import { supabase } from './db.js';
-import { initFooter } from './footer.js'; // <-- NEW: Import the footer
+import { initFooter } from './footer.js'; 
 
 // Get the user's secret ID from their browser
 function getGhostId() {
@@ -8,7 +8,7 @@ function getGhostId() {
 
 document.addEventListener('DOMContentLoaded', async () => {
     
-    initFooter(); // <-- NEW: Inject the footer into the Explore page!
+    initFooter(); 
 
     const grid = document.getElementById('tape-grid');
     const loadingMsg = document.getElementById('loading-msg');
@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const backBtn = document.getElementById('back-to-deck-btn');
     const lastTape = localStorage.getItem('study_last_tape');
     if (lastTape && backBtn) {
-        // If they came from a custom tape, rewrite the link to include the hash!
         backBtn.href = `index.html#${lastTape}`;
     }
 
@@ -40,13 +39,29 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
+    // --- CALCULATE & INJECT GLOBAL ANALYTICS ---
+    let totalTapes = data.length;
+    let totalTracks = 0;
+    let totalLikes = 0;
+    let totalPlays = 0;
+
+    data.forEach(tape => {
+        totalTracks += tape.tracks.length;
+        totalLikes += (tape.likes || 0);
+        totalPlays += (tape.plays || 0);
+    });
+
+    document.getElementById('stat-tapes').textContent = totalTapes;
+    document.getElementById('stat-tracks').textContent = totalTracks;
+    document.getElementById('stat-likes').textContent = totalLikes;
+    document.getElementById('stat-plays').textContent = totalPlays;
+
     // Edit Modal Variables
     const editModal = document.getElementById('edit-modal');
     const editTitleInput = document.getElementById('edit-tape-title');
     const editLinksInput = document.getElementById('edit-tape-links');
     let currentEditingTapeId = null;
 
-    // Close Modal Button
     document.getElementById('cancel-edit-btn').addEventListener('click', () => {
         editModal.style.display = 'none';
         editModal.classList.add('hidden');
@@ -59,6 +74,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         // 1. Build the playable part of the card
         const cardContent = document.createElement('div');
         cardContent.className = 'tape-info';
+        
+        // Load the user's previously liked tapes from local memory
+        let likedTapes = JSON.parse(localStorage.getItem('study_liked_tapes') || '[]');
+        const isLiked = likedTapes.includes(tape.id);
+        const currentLikes = tape.likes || 0;
+
         cardContent.innerHTML = `
             <h3>${tape.title}</h3>
             <p>${tape.tracks.length} Tracks</p>
@@ -66,11 +87,77 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <div class="mini-spool"></div>
                 <div class="mini-spool"></div>
             </div>
+            
+            <div class="like-container">
+                <button class="like-btn" title="Like this tape">
+                    <img src="img/heart.png" class="like-icon ${isLiked ? 'liked' : ''}" alt="Heart">
+                </button>
+                <span class="like-count">${currentLikes}</span>
+            </div>
         `;
         
-        cardContent.addEventListener('click', () => {
+        // Handle clicking the card to play it (skips if they clicked the heart)
+        cardContent.addEventListener('click', (e) => {
+            if (e.target.closest('.like-btn')) return; 
             window.location.href = `index.html#${tape.id}`;
         });
+
+        // --- NEW: TOGGLE LIKE BUTTON LOGIC ---
+        const likeBtn = cardContent.querySelector('.like-btn');
+        const likeIcon = cardContent.querySelector('.like-icon');
+        const likeCountEl = cardContent.querySelector('.like-count');
+
+        likeBtn.addEventListener('click', async (e) => {
+            e.stopPropagation(); 
+
+            let currentLikedTapes = JSON.parse(localStorage.getItem('study_liked_tapes') || '[]');
+            const isCurrentlyLiked = currentLikedTapes.includes(tape.id);
+            
+            // Get the live number directly from the UI
+            let currentDisplayLikes = parseInt(likeCountEl.textContent);
+            const globalLikesEl = document.getElementById('stat-likes');
+
+            let newLikeTotal;
+
+            if (isCurrentlyLiked) {
+                // 1. UNLIKE LOGIC
+                likeIcon.classList.remove('liked');
+                newLikeTotal = Math.max(0, currentDisplayLikes - 1); // Prevents negative numbers
+                likeCountEl.textContent = newLikeTotal;
+                
+                if (globalLikesEl) {
+                    globalLikesEl.textContent = Math.max(0, parseInt(globalLikesEl.textContent) - 1);
+                }
+
+                // Remove the ID from local storage
+                currentLikedTapes = currentLikedTapes.filter(id => id !== tape.id);
+
+            } else {
+                // 2. LIKE LOGIC
+                likeIcon.classList.add('liked');
+                newLikeTotal = currentDisplayLikes + 1;
+                likeCountEl.textContent = newLikeTotal;
+                
+                if (globalLikesEl) {
+                    globalLikesEl.textContent = parseInt(globalLikesEl.textContent) + 1;
+                }
+
+                // Add the ID to local storage
+                currentLikedTapes.push(tape.id);
+            }
+
+            // Save the updated list back to the browser
+            localStorage.setItem('study_liked_tapes', JSON.stringify(currentLikedTapes));
+
+            // 3. Update Supabase silently in the background
+            const { error } = await supabase
+                .from('mixtapes')
+                .update({ likes: newLikeTotal })
+                .eq('id', tape.id);
+
+            if (error) console.error("Failed to update likes:", error);
+        });
+
         card.appendChild(cardContent);
 
         // 2. Add CRUD Controls ONLY if you own the tape (Ghost ID check)
@@ -92,11 +179,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 e.stopPropagation(); 
                 currentEditingTapeId = tape.id;
                 
-                // Convert stored IDs back into full YouTube links for easy editing
                 editTitleInput.value = tape.title;
                 editLinksInput.value = tape.tracks.map(id => `https://youtu.be/${id}`).join('\n');
                 
-                editModal.style.display = 'flex'; // Show modal
+                editModal.style.display = 'flex';
                 editModal.classList.remove('hidden');
             });
 
@@ -146,7 +232,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error(error);
             document.getElementById('save-edit-btn').textContent = "[ SAVE CHANGES ]";
         } else {
-            // Reload the page to reflect the new changes
             window.location.reload(); 
         }
     });

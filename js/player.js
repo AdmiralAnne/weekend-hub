@@ -24,10 +24,12 @@ export async function initPlayer() {
 
         if (data && !error) {
             mixtape = { title: data.title, tracks: data.tracks };
-            // NEW: Remember this specific tape ID!
             localStorage.setItem('study_last_tape', hashData); 
-        } else {
-            console.error("Tape not found in database.");
+            
+            // --- NEW: ANALYTICS TRACKING ---
+            // Silently increment the play count in the background
+            const newPlays = (data.plays || 0) + 1;
+            supabase.from('mixtapes').update({ plays: newPlays }).eq('id', hashData).then();
         }
     } else {
         // NEW: If there is no hash, clear the memory so it goes to the default tape

@@ -291,6 +291,53 @@ input[type=range]::-moz-range-thumb {
     font-size: 1.6rem;
 }
 
+/* --- LIKE BUTTON UI --- */
+.like-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.like-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    padding: 5px;
+}
+
+.like-btn:hover {
+    transform: scale(1.1);
+}
+
+.like-btn:active {
+    transform: scale(0.9);
+}
+
+.like-icon {
+    width: 20px;
+    height: 20px;
+    filter: grayscale(100%); /* Makes your heart.png grey by default */
+    opacity: 0.5;
+    transition: all 0.3s ease;
+}
+
+/* When the user clicks like, this class is added */
+.like-icon.liked {
+    filter: grayscale(0%); /* Restores the original colors of your heart.png */
+    opacity: 1;
+}
+
+.like-count {
+    font-size: 1.6rem;
+    color: var(--accent);
+    font-family: var(--font-ui);
+}
+
 /* Spin Animation */
 @keyframes spin { 100% { transform: rotate(360deg); } }
 .playing .spool { animation: spin 2.5s linear infinite; }
