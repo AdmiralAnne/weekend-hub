@@ -396,6 +396,44 @@ textarea { height: 120px; resize: vertical; }
 
 #yt-player-container { position: absolute; left: -9999px; top: -9999px; }
 
+/* 4. Styled "Empty States" for To-Do List */
+#task-list:empty::after {
+    content: "// System idle. All tasks complete.";
+    display: block;
+    text-align: center;
+    padding: 30px 10px;
+    color: var(--border);
+    font-size: 1.4rem;
+    font-family: var(--font-ui);
+    opacity: 0.6;
+    animation: terminal-pulse 2s infinite ease-in-out;
+}
+
+@keyframes terminal-pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+}
+
+/* 5. Satisfying Task Completion (Color Flash Only) */
+.task span {
+    /* Smooths out the strikethrough effect */
+    transition: all 0.3s ease; 
+}
+
+.task.completed {
+    /* Triggers the flash without moving the text */
+    animation: task-color-flash 0.6s ease forwards;
+}
+
+@keyframes task-color-flash {
+    0% { 
+        background: rgba(0, 255, 100, 0.2); /* Retro hacker green */
+    }
+    100% { 
+        background: transparent; 
+    }
+}
+
 /* Mobile Friendliness */
 @media (max-width: 768px) { 
     body { padding: 10px; }

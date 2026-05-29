@@ -4,11 +4,11 @@ export function initFooter() {
     
     footer.innerHTML = `
         <div class="footer-content">
-            Made with 💖 by<a href="https://marjidesigns.super.site" target="_blank" class="footer-link">[ Marji ]</a><br>
-            <span class="footer-divider">//</span>
-            <a href="https://github.com/AdmiralAnne/weekend-hub" target="_blank" class="footer-link">[ GitHub ]</a>
-            <span class="footer-divider">//</span>
-            <a href="terms.html" class="footer-link">[ Terms & Privacy ]</a>
+            Made with 💖 by<a href="https://marjidesigns.super.site" target="_blank" class="footer-link">[Marji]</a><br>
+            <span class="footer-divider">/</span>
+            <a href="https://github.com/AdmiralAnne/weekend-hub" target="_blank" class="footer-link">[GitHub]</a>
+            <span class="footer-divider">/</span>
+            <a href="terms.html" class="footer-link">[Terms & Privacy]</a>
         </div>
     `;
     
