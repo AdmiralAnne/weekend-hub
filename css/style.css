@@ -115,7 +115,7 @@ h2 { font-size: 2.2rem; color: var(--accent); margin-bottom: 15px; border-bottom
 /* Ambient Mixer Sliders */
 .slider-group {
     display: grid;
-    grid-template-columns: 90px 1fr; 
+    grid-template-columns: 110px 1fr; /* Increased from 90px to 110px so "NIGHT" stops wrapping */
     align-items: center;
     gap: 15px;
     margin-bottom: 15px;
@@ -131,27 +131,48 @@ h2 { font-size: 2.2rem; color: var(--accent); margin-bottom: 15px; border-bottom
 
 input[type=range] {
     -webkit-appearance: none;
+    appearance: none;
     width: 100%;
     background: transparent;
 }
 
-input[type=range]::-webkit-slider-runnable-track, input[type=range]::-moz-range-track {
+/* --- CHROME, SAFARI, EDGE --- */
+input[type=range]::-webkit-slider-runnable-track {
     width: 100%;
     height: 8px;
-    background: rgba(0,0,0,0.3);
+    background: #ffffff; /* White track */
     border: 1px solid var(--border);
     border-radius: 4px;
 }
 
-input[type=range]::-webkit-slider-thumb, input[type=range]::-moz-range-thumb {
+input[type=range]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    height: 20px;
-    width: 12px;
-    background: var(--accent);
+    appearance: none;
+    height: 22px;
+    width: 14px;
+    background: var(--accent); /* Purple handle */
     cursor: pointer;
-    margin-top: -7px;
+    margin-top: -8px; /* Centers the handle on the track */
     border-radius: 2px;
-    border: none;
+    border: 1px solid var(--bg-dark);
+}
+
+/* --- FIREFOX --- */
+input[type=range]::-moz-range-track {
+    width: 100%;
+    height: 8px;
+    background: #ffffff; /* White track */
+    border: 1px solid var(--border);
+    border-radius: 4px;
+}
+
+input[type=range]::-moz-range-thumb {
+    height: 22px;
+    width: 14px;
+    background: var(--accent); /* Purple handle */
+    cursor: pointer;
+    border-radius: 2px;
+    border: 1px solid var(--bg-dark);
 }
 
 /* --- EXPLORE PAGE GRID --- */
