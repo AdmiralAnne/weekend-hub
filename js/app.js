@@ -2,7 +2,9 @@ import { initWeather, initClock } from './weather.js';
 import { initTodo } from './todo.js';
 import { initPlayer } from './player.js';
 import { initAmbient } from './ambient.js';
-import { initFooter } from './footer.js'; // NEW
+import { initFooter } from './footer.js';
+import { initNotes } from './notes.js';
+
 
 document.addEventListener('DOMContentLoaded', () => {
     initClock();
@@ -10,5 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initTodo();
     initPlayer();
     initAmbient(); 
-    initFooter(); // NEW: Injects the footer safely at the end
+    initFooter();
+    initNotes();
 });
