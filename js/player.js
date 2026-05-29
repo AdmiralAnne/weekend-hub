@@ -8,7 +8,7 @@ export async function initPlayer() {
     // Default Mixtape
     let mixtape = {
         title: "Weekend Mix",
-        tracks: ["EWrX250Zhko", "TfmECBzmOn4", "7hfTa8nXKk8", "c6JAn-IGX6o"] 
+        tracks: ["9BNOOIe8i84", "Ksut6ib0VSY", "OgU_UDYd9lY", "7NOSDKb0HlU"] 
     };
 
     // 1. CHECK FOR CLOUD TAPE ON LOAD
