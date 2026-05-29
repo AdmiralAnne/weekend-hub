@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes Archive</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <header class="top-bar widget" style="margin-bottom: 20px;">
+            <h2 style="margin-bottom: 0;">// NOTES ARCHIVE</h2>
+            <a href="index.html" class="text-btn" style="text-decoration: none;">[ <- BACK TO DECK ]</a>
+        </header>
+
+        <div id="loading-msg" style="font-size: 2rem; text-align: center; margin-top: 50px;">
+            Decrypting logs...
+        </div>
+
+        <div id="notes-grid" class="explore-grid"></div>
+
+    </div>
+
+    <div id="read-note-modal" class="modal-overlay hidden">
+        <div class="modal-content widget">
+            <button id="close-note-btn" class="close-modal-btn">[ X ]</button>
+            <h2 id="modal-note-title" style="margin-bottom: 10px; color: var(--accent);">// TITLE</h2>
+            <div id="modal-note-date" style="font-size: 1.4rem; opacity: 0.6; margin-bottom: 20px; border-bottom: 1px dashed var(--border); padding-bottom: 10px;">Date</div>
+            
+            <div id="modal-note-content" style="font-size: 1.6rem; line-height: 1.5; max-height: 400px; overflow-y: auto; white-space: pre-wrap; margin-bottom: 20px;">
+                Content goes here...
+            </div>
+            
+            <div class="modal-actions">
+                <button id="delete-note-btn" class="outline-btn" style="color: #ff5252; border-color: #ff5252;">DELETE LOG</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/notes-archive.js"></script>
+</body>
+</html>

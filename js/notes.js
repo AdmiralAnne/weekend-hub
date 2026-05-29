@@ -2,64 +2,54 @@ import { supabase } from './db.js';
 
 export async function initNotes() {
     const notesArea = document.getElementById('notes-area');
-    const syncBtn = document.getElementById('sync-notes-btn');
+    const titleArea = document.getElementById('note-title');
+    const saveBtn = document.getElementById('save-note-btn');
     const statusMsg = document.getElementById('notes-status');
     
-    // Retrieve the Ghost ID from your existing system
     const ghostId = localStorage.getItem('study_ghost_id');
 
-    // 1. Instant Load from Local Storage
-    const localNotes = localStorage.getItem('study_notes') || '';
-    notesArea.value = localNotes;
+    // 1. Load the active local draft
+    notesArea.value = localStorage.getItem('study_draft_note') || '';
+    titleArea.value = localStorage.getItem('study_draft_title') || '';
 
-    // 2. Background Sync: Check cloud for a newer version
-    if (ghostId) {
-        const { data, error } = await supabase
-            .from('scratchpad')
-            .select('content')
-            .eq('ghost_id', ghostId)
-            .single();
-        
-        if (data && !error && data.content !== localNotes) {
-            notesArea.value = data.content;
-            localStorage.setItem('study_notes', data.content);
-            statusMsg.textContent = "Synced from cloud.";
-        }
-    }
-
-    // 3. Auto-save to Local Storage on every keystroke
+    // 2. Auto-save to browser memory on every keystroke
     notesArea.addEventListener('input', () => {
-        localStorage.setItem('study_notes', notesArea.value);
-        statusMsg.textContent = "Unsynced changes...";
-        statusMsg.style.opacity = '1';
+        localStorage.setItem('study_draft_note', notesArea.value);
+        statusMsg.textContent = "Draft saved locally...";
+    });
+    titleArea.addEventListener('input', () => {
+        localStorage.setItem('study_draft_title', titleArea.value);
     });
 
-    // 4. Manual Sync to Cloud
-    syncBtn.addEventListener('click', async () => {
-        if (!ghostId) {
-            alert("Ghost ID missing. Cannot sync.");
-            return;
-        }
+    // 3. Save as a PERMANENT Note to Supabase
+    saveBtn.addEventListener('click', async () => {
+        if (!ghostId) return alert("Ghost ID missing.");
+        if (!notesArea.value.trim()) return alert("Note is empty!");
         
-        syncBtn.textContent = "[ SYNCING... ]";
+        saveBtn.textContent = "[ SAVING... ]";
         
-        // Upsert creates a new row if it doesn't exist, or updates if it does
         const { error } = await supabase
-            .from('scratchpad')
-            .upsert({ 
+            .from('notes')
+            .insert([{ 
                 ghost_id: ghostId, 
-                content: notesArea.value, 
-                updated_at: new Date() 
-            });
+                title: titleArea.value.trim() || 'Untitled Note',
+                content: notesArea.value 
+            }]);
 
         if (!error) {
-            syncBtn.textContent = "[ SYNCED ]";
-            statusMsg.textContent = "Backed up to cloud securely.";
-            statusMsg.style.opacity = '0.5';
-            setTimeout(() => syncBtn.textContent = "[ SYNC ]", 2000);
+            saveBtn.textContent = "[ LOGGED ]";
+            statusMsg.textContent = "Note sent to Archive.";
+            
+            // Clear the scratchpad so you can start a new thought
+            notesArea.value = '';
+            titleArea.value = '';
+            localStorage.removeItem('study_draft_note');
+            localStorage.removeItem('study_draft_title');
+            
+            setTimeout(() => saveBtn.textContent = "[ SAVE NOTE ]", 2000);
         } else {
             console.error(error);
-            syncBtn.textContent = "[ ERROR ]";
+            saveBtn.textContent = "[ ERROR ]";
         }
     });
 }

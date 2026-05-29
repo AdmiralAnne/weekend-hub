@@ -99,12 +99,18 @@
                 <div class="widget notes-widget">
                     <div class="tape-header-row">
                         <h2>// SCRATCHPAD</h2>
-                        <button id="sync-notes-btn" class="text-btn" style="font-size: 1.2rem;">[ SYNC ]</button>
+                        <div>
+                            <a href="notes.html" class="text-btn" style="text-decoration: none; font-size: 1.2rem; margin-right: 10px;">[ ARCHIVE ]</a>
+                            <button id="save-note-btn" class="text-btn" style="font-size: 1.2rem;">[ SAVE NOTE ]</button>
+                        </div>
                     </div>
+                    
+                    <input type="text" id="note-title" placeholder="Note Title..." style="background: transparent; border: none; border-bottom: 1px dashed var(--border); color: var(--accent); font-family: var(--font-ui); font-size: 1.6rem; padding: 5px; margin-bottom: 10px; outline: none;">
+                    
                     <textarea id="notes-area" placeholder="Jot down your thoughts, code snippets, or deep work ideas..."></textarea>
-                    <div id="notes-status" style="font-size: 1.2rem; color: var(--accent); opacity: 0.5; text-align: right; margin-top: 5px;">Local save active...</div>
+                    <div id="notes-status" style="font-size: 1.2rem; color: var(--accent); opacity: 0.5; text-align: right; margin-top: 5px;">Local draft active...</div>
                 </div>
-                
+
             </div> </div> </div> <div id="creator-modal" class="modal-overlay hidden">
         <div class="modal-content widget">
             <h2>// BUILD A NEW TAPE</h2>
