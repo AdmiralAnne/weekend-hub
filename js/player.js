@@ -5,35 +5,45 @@ export async function initPlayer() {
     let isPlaying = false;
     let currentTrackIndex = 0;
     
-    // Default Mixtape
-    let mixtape = {
-        title: "Weekend Mix",
-        tracks: ["9BNOOIe8i84", "Ksut6ib0VSY", "8scL5oJX6CM", "7NOSDKb0HlU"] 
-    };
+    // --- NEW: THE OFFICIAL GENESIS TAPE ---
+    // PASTE your new tape's ID right here between the quotes:
+    const DEFAULT_TAPE_ID = "70a1df74-d198-4c1f-aac2-14c9dcf43ce6";
+
+    let mixtape = { title: "Loading...", tracks: [] };
 
     // 1. CHECK FOR CLOUD TAPE ON LOAD
-    const hashData = window.location.hash.substring(1);
-    if (hashData && hashData.length > 20) { 
-        document.getElementById('display-title').textContent = "Loading cloud tape...";
-        
-        const { data, error } = await supabase
-            .from('mixtapes')
-            .select('*')
-            .eq('id', hashData)
-            .single();
+    let hashData = window.location.hash.substring(1);
+    
+    // If there is no hash in the URL, force it to load the Default Tape!
+    if (!hashData || hashData.length < 20) {
+        hashData = DEFAULT_TAPE_ID;
+        // Update the browser URL silently so the back buttons still work
+        window.history.replaceState(null, null, `#${hashData}`); 
+    }
 
-        if (data && !error) {
-            mixtape = { title: data.title, tracks: data.tracks };
-            localStorage.setItem('study_last_tape', hashData); 
-            
-            // --- NEW: ANALYTICS TRACKING ---
-            // Silently increment the play count in the background
-            const newPlays = (data.plays || 0) + 1;
-            supabase.from('mixtapes').update({ plays: newPlays }).eq('id', hashData).then();
-        }
+    document.getElementById('display-title').textContent = "Fetching cloud tape...";
+        
+    const { data, error } = await supabase
+        .from('mixtapes')
+        .select('*')
+        .eq('id', hashData)
+        .single();
+
+    if (data && !error) {
+        mixtape = { title: data.title, tracks: data.tracks };
+        localStorage.setItem('study_last_tape', hashData); 
+        
+        // --- NEW: ANALYTICS TRACKING ---
+        // Silently increment the play count in the background every time the tape loads
+        const newPlays = (data.plays || 0) + 1;
+        supabase.from('mixtapes').update({ plays: newPlays }).eq('id', hashData).then();
+        
     } else {
-        // NEW: If there is no hash, clear the memory so it goes to the default tape
-        localStorage.removeItem('study_last_tape'); 
+        // Fallback just in case they have no internet connection
+        mixtape = { 
+            title: "Offline Mix", 
+            tracks: ["9BNOOIe8i84", "Ksut6ib0VSY", "8scL5oJX6CM", "7NOSDKb0HlU"] 
+        };
     }
 
     // Set UI Title and render the tracks
